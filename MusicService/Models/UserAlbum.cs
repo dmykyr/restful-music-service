@@ -1,16 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusicService.Models
 {
+    [Keyless]
     public class UserAlbum
     {
-        [Key]
-        [Column(Order = 0)]
+        [Required]
         public Guid UserId { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
+        [Required]
         public Guid AlbumId { get; set; }
 
         [ForeignKey("UserId")]
