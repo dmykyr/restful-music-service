@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MusicService.Data;
+using MusicService.Data.Repositories;
+using MusicService.Models;
 
 namespace MusicService
 {
@@ -17,6 +19,7 @@ namespace MusicService
             builder.Services.AddSingleton<IConfigurationRoot>(option => {
                 return configuration;
             });
+            builder.Services.AddScoped<IRepository<Album>, AlbumRepository>();
 
             builder.Services.AddControllers();
 
