@@ -20,6 +20,10 @@ namespace MusicService
                 return configuration;
             });
             builder.Services.AddScoped<IRepository<Album>, AlbumRepository>();
+            builder.Services.AddScoped<IRepository<Song>, SongRepository>();
+            builder.Services.AddScoped<IRepository<Artist>, ArtistRepository>();
+            builder.Services.AddScoped<IRepository<User>, UserRepository>();
+            builder.Services.AddScoped<IRepository<Role>, RoleRepository>();
 
             builder.Services.AddControllers();
 
