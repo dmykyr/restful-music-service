@@ -1,7 +1,8 @@
 ﻿using MusicService.Models;
+using System.Data.Entity;
 
 namespace MusicService.Data.Repositories
-{
+{ 
     public class AlbumRepository : IRepository<Album>
     {
         private readonly MusicDbContext _context;
@@ -11,12 +12,30 @@ namespace MusicService.Data.Repositories
             _context = context;
         }
 
-        public async Task<Album> Add(Album album)
+        public async Task<IEnumerable<Album>> GetAll()
         {
-            await _context.Albums.AddAsync(album);
+            return await _context.Albums.ToListAsync();
+        }
+
+        public async Task<Album> Get(Guid id)
+        {
+            return await _context.Albums.FindAsync(id);
+        }
+
+        public async Task<Album> Add(Album entity)
+        {
+            await _context.Albums.AddAsync(entity);
             await _context.SaveChangesAsync();
 
-            return album;
+            return entity;
+        }
+
+        public async Task<Album> Update(Album entity)
+        {
+            _context.Albums.Update(entity);
+            await _context.SaveChangesAsync();
+
+            return entity;
         }
 
         public async Task<Album> Delete(Guid id)
@@ -32,24 +51,6 @@ namespace MusicService.Data.Repositories
             }
 
             throw new NotImplementedException();
-        }
-
-        public async Task<Album> Get(Guid id)
-        {
-            return await _context.Albums.FindAsync(id);
-        }
-
-        public IEnumerable<Album> GetAll()
-        {
-            return _context.Albums;
-        }
-
-        public async Task<Album> Update(Album album)
-        {
-            _context.Albums.Update(album);
-            await _context.SaveChangesAsync();
-
-            return album;
         }
     }
 }
