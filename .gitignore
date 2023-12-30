@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/MusicService/Migrations
+/MusicService/music_app.db
+/MusicService/appsettings.json
