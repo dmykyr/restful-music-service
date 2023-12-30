@@ -22,6 +22,7 @@ namespace MusicService
             builder.Services.AddScoped<IRepository<Album>, AlbumRepository>();
             builder.Services.AddScoped<IRepository<Song>, SongRepository>();
             builder.Services.AddScoped<IRepository<Artist>, ArtistRepository>();
+            builder.Services.AddScoped<IRepository<User>, UserRepository>();
 
             builder.Services.AddControllers();
 
