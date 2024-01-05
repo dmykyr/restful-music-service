@@ -51,7 +51,6 @@ namespace MusicService.Services
             album.PublishingDate = albumDTO.PublishingDate ?? album.PublishingDate;
 
             await _albumRepository.Update(album);
-
             return _mapper.Map<AlbumResponse>(album);
         }
 

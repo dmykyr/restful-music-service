@@ -16,6 +16,10 @@ namespace MusicService.Data
             CreateMap<CreateAlbumDTO, Album>();
             CreateMap<UpdateAlbumDTO, Album>();
             CreateMap<Album, AlbumResponse>();
+
+            CreateMap<CreateSongDTO, Song>();
+            CreateMap<UpdateSongDTO, Song>();
+            CreateMap<Song, SongResponse>();
         }
     }
 }
