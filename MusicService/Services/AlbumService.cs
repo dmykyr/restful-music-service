@@ -9,10 +9,10 @@ namespace MusicService.Services
 {
     public class AlbumService
     {
-        private readonly IRepository<Album> _albumRepository;
+        private readonly AlbumRepository _albumRepository;
         private readonly IMapper _mapper;
 
-        public AlbumService(IRepository<Album> albumRepository, IMapper mapper)
+        public AlbumService(AlbumRepository albumRepository, IMapper mapper)
         {
             _albumRepository = albumRepository;
             _mapper = mapper;
