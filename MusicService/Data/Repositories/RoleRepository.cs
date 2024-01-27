@@ -3,7 +3,7 @@ using System.Data.Entity;
 
 namespace MusicService.Data.Repositories
 {
-    public class RoleRepository : IRepository<Role>
+    public class RoleRepository
     {
         private readonly MusicDbContext _context;
 
@@ -20,6 +20,11 @@ namespace MusicService.Data.Repositories
         public async Task<Role> Get(Guid id)
         {
             return await _context.Roles.FindAsync(id);
+        }
+
+        public async Task<Role> GetByName(string roleName)
+        {
+            return await _context.Roles.FirstAsync(r => r.Name == roleName);
         }
 
         public async Task<Role> Add(Role entity)
