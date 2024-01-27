@@ -8,10 +8,10 @@ namespace MusicService.Services
 {
     public class SongService
     {
-        private readonly IRepository<Song> _songRepository;
+        private readonly SongRepository _songRepository;
         private readonly IMapper _mapper;
 
-        public SongService(IRepository<Song> songRepository, IMapper mapper)
+        public SongService(SongRepository songRepository, IMapper mapper)
         {
             _songRepository = songRepository;
             _mapper = mapper;

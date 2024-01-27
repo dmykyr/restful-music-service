@@ -3,7 +3,7 @@ using System.Data.Entity;
 
 namespace MusicService.Data.Repositories
 { 
-    public class AlbumRepository : IRepository<Album>
+    public class AlbumRepository
     {
         private readonly MusicDbContext _context;
 

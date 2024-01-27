@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MusicService.Data;
 using MusicService.Data.Repositories;
-using MusicService.Models;
 
 namespace MusicService
 {
@@ -19,9 +18,9 @@ namespace MusicService
             builder.Services.AddSingleton<IConfigurationRoot>(option => {
                 return configuration;
             });
-            builder.Services.AddScoped<IRepository<Album>, AlbumRepository>();
-            builder.Services.AddScoped<IRepository<Song>, SongRepository>();
-            builder.Services.AddScoped<IRepository<Artist>, ArtistRepository>();
+            builder.Services.AddScoped<AlbumRepository>();
+            builder.Services.AddScoped<SongRepository>();
+            builder.Services.AddScoped<ArtistRepository>();
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<RoleRepository>();
             builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
