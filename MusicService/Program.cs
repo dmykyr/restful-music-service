@@ -25,6 +25,7 @@ namespace MusicService
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<RoleRepository>();
             builder.Services.AddScoped<SongService>();
+            builder.Services.AddScoped<ArtistService>();
             builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
             builder.Services.AddControllers();
