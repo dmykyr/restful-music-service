@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicService.DTO;
+using MusicService.Models;
 using MusicService.Responses;
 using MusicService.Services;
 
@@ -17,33 +18,33 @@ namespace MusicService.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ArtistResponse>> GetAllSongs()
+        public async Task<IEnumerable<ArtistResponse>> GetAllArtists()
         {
             return await _artistService.GetAll();
         }
 
         [HttpGet("{artistId}")]
-        public async Task<ArtistResponse> GetSongById(Guid songId)
+        public async Task<ArtistResponse> GetArtistById(Guid artistId)
         {
-            return await _artistService.Get(songId);
+            return await _artistService.Get(artistId);
         }
 
         [HttpPost]
-        public async Task<ArtistResponse> AddSong([FromBody] ArtistDTO body)
+        public async Task<ArtistResponse> AddArtist([FromBody] ArtistDTO body)
         {
             return await _artistService.Add(body);
         }
 
         [HttpPatch("{artistId}")]
-        public async Task<ArtistResponse> UpdateSong(Guid songId, [FromBody] ArtistDTO body)
+        public async Task<ArtistResponse> UpdateArtist(Guid artistId, [FromBody] ArtistDTO body)
         {
-            return await _artistService.Update(songId, body);
+            return await _artistService.Update(artistId, body);
         }
 
         [HttpDelete("{artistId}")]
-        public async Task<ArtistResponse> DeleteSong(Guid songId)
+        public async Task<ArtistResponse> DeleteArtist(Guid artistId)
         {
-            return await _artistService.Delete(songId);
+            return await _artistService.Delete(artistId);
         }
     }
 }
