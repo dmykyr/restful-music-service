@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MusicService.Models
 {
     [Keyless]
-    public class UserAlbum
+    public class FavoriteAlbum
     {
         [Required]
         public Guid UserId { get; set; }
