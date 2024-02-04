@@ -11,7 +11,8 @@ namespace MusicService.Data
         public DbSet<Song> Songs { get; set; }
         public DbSet<Album> Albums { get; set; }
         public DbSet<ArtistSong> ArtistsSongs { get; set; }
-        public DbSet<FavoriteAlbum> UsersAlbums { get; set; }
+        public DbSet<FavoriteAlbum> FavoriteAlbums { get; set; }
+        public DbSet<FavoriteArtist> FavoriteArtists { get; set; }
         public DbSet<UserArtist> UsersArtists { get; set; }
         public MusicDbContext(DbContextOptions<MusicDbContext>? options) : base(options) { }
     }
