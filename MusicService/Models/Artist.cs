@@ -10,5 +10,8 @@ namespace MusicService.Models
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+
+        [Required]
+        public string Base64Image { get; set; }
     }
 }

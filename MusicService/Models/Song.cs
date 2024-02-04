@@ -16,5 +16,8 @@ namespace MusicService.Models
 
         [Required]
         public DateTime PublishingDate { get; set; }
+
+        [Required]
+        public string Base64Image { get; set; }
     }
 }
