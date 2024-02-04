@@ -52,5 +52,40 @@ namespace MusicService.Data.Repositories
 
             throw new NotImplementedException();
         }
+
+        public async Task<List<Album>> GetFavoriteAlbums (Guid id)
+        {
+            return await _context.UsersAlbums
+                .Where(ua => ua.UserId == id)
+                .Select(ua => ua.Album)
+                .ToListAsync();
+            
+        }
+
+        public async Task<List<Artist>> GetFavoriteArtists(Guid id)
+        {
+            return await _context.UsersArtists
+                .Where(ua => ua.UserId == id)
+                .Select(ua => ua.Artist)
+                .ToListAsync();
+        }
+
+        public async Task<Album> RemoveFavoriteAlbum(Guid userId, Guid albumId)
+        {
+            var userAlbum = await _context.UsersAlbums
+                .Include(ua => ua.Album)
+                .FirstAsync(ua => ua.AlbumId == albumId && ua.UserId == userId);
+            _context.UsersAlbums.Remove(userAlbum);
+            return userAlbum.Album;
+        }
+        
+        public async Task<Artist> RemoveFavoriteArtist(Guid userId, Guid artistId)
+        {
+            var userArtist = await _context.UsersArtists
+               .Include(ua => ua.Artist)
+               .FirstAsync(ua => ua.ArtistId == artistId && ua.UserId == userId);
+            _context.UsersArtists.Remove(userArtist);
+            return userArtist.Artist;
+        }
     }
 }
