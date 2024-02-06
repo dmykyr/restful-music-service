@@ -16,6 +16,9 @@ namespace MusicService.Models
         public string Title { get; set; }
 
         [Required]
+        public string Base64Image { get; set; }
+
+        [Required]
         public DateTime PublishingDate { get; set; }
 
         [ForeignKey("PublisherId")]

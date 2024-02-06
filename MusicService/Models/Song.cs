@@ -15,6 +15,9 @@ namespace MusicService.Models
         public byte[] Track { get; set; }
 
         [Required]
+        public string Base64Image { get; set; }
+
+        [Required]
         public DateTime PublishingDate { get; set; }
     }
 }
