@@ -55,36 +55,42 @@ namespace MusicService.Data.Repositories
 
         public async Task<List<Album>> GetFavoriteAlbums (Guid id)
         {
-            return await _context.UsersAlbums
-                .Where(ua => ua.UserId == id)
-                .Select(ua => ua.Album)
+            return await _context.FavoriteAlbums
+                .Where(fa => fa.UserId == id)
+                .Select(fa => fa.Album)
                 .ToListAsync();
             
         }
 
         public async Task<List<Artist>> GetFavoriteArtists(Guid id)
         {
-            return await _context.UsersArtists
-                .Where(ua => ua.UserId == id)
-                .Select(ua => ua.Artist)
+            return await _context.FavoriteArtists
+                .Where(fa => fa.UserId == id)
+                .Select(fa => fa.Artist)
                 .ToListAsync();
         }
 
         public async Task<Album> RemoveFavoriteAlbum(Guid userId, Guid albumId)
         {
-            var userAlbum = await _context.UsersAlbums
-                .Include(ua => ua.Album)
-                .FirstAsync(ua => ua.AlbumId == albumId && ua.UserId == userId);
-            _context.UsersAlbums.Remove(userAlbum);
+            var userAlbum = await _context.FavoriteAlbums
+                .Include(fa => fa.Album)
+                .FirstAsync(fa => fa.AlbumId == albumId && fa.UserId == userId);
+            _context.FavoriteAlbums.Remove(userAlbum);
             return userAlbum.Album;
         }
         
         public async Task<Artist> RemoveFavoriteArtist(Guid userId, Guid artistId)
         {
-            var userArtist = await _context.UsersArtists
-               .Include(ua => ua.Artist)
-               .FirstAsync(ua => ua.ArtistId == artistId && ua.UserId == userId);
-            _context.UsersArtists.Remove(userArtist);
+            var userArtist = await _context.FavoriteArtists
+               .Include(fa => fa.Artist)
+               .FirstAsync(fa => fa.ArtistId == artistId && fa.UserId == userId);
+            _context.FavoriteArtists.Remove(userArtist);
+            return userArtist.Artist;
+        }
+
+        public async Task<Artist> GetUserRelatedArtist (Guid userId)
+        {
+            var userArtist = await _context.UsersArtists.Include(ua => ua.Artist).FirstAsync(ua => ua.UserId == userId);
             return userArtist.Artist;
         }
     }

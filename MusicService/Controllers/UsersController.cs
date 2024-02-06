@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MusicService.Models;
 using MusicService.Responses;
 using MusicService.Services;
 

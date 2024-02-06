@@ -52,5 +52,10 @@ namespace MusicService.Data.Repositories
 
             throw new NotImplementedException();
         }
+
+        public async Task<List<Album>> GetArtistAlbums (Guid artistId)
+        {
+            return await _context.Albums.Where(a => a.PublisherId == artistId).ToListAsync();
+        }
     }
 }

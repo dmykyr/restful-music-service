@@ -13,13 +13,13 @@ namespace MusicService.Services
         private readonly IMapper _mapper;
 
         public UserService(
-            UserRepository userRepository, 
-            RoleRepository roleRepository, 
-            IMapper mapper)
+            IMapper mapper,
+            UserRepository userRepository,
+            RoleRepository roleRepository )
         {
+            _mapper = mapper;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
-            _mapper = mapper;
         }
 
         public async Task<UserResponse> Get (Guid id)
