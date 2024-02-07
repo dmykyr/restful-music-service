@@ -9,6 +9,8 @@ namespace MusicService.DTOs
 
         public byte[] Track { get; set; }
 
+        public string Base64Image { get; set; }
+
         public DateTime PublishingDate { get; set; }
     }
 }

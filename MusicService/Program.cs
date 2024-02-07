@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MusicService.Data;
 using MusicService.Data.Repositories;
+using MusicService.Services;
 
 namespace MusicService
 {
@@ -23,6 +24,9 @@ namespace MusicService
             builder.Services.AddScoped<ArtistRepository>();
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<RoleRepository>();
+
+            builder.Services.AddScoped<SongService>();
+
             builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
             builder.Services.AddControllers();
