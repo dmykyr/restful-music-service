@@ -38,7 +38,7 @@ namespace MusicService.Data.Repositories
             return entity;
         }
         
-        public async Task<Song> Delete(Guid id)
+        public async Task Delete(Guid id)
         {
             var song = await _context.Songs.FindAsync(id);
 
@@ -46,8 +46,6 @@ namespace MusicService.Data.Repositories
             {
                 _context.Songs.Remove(song);
                 await _context.SaveChangesAsync();
-
-                return song;
             }
 
             throw new NotImplementedException();

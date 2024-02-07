@@ -47,16 +47,16 @@ namespace MusicService.Services
 
             song.Title = songDTO.Title ?? song.Title;
             song.Track = songDTO.Track ?? song.Track;
+            song.Base64Image = songDTO.Base64Image ?? song.Base64Image;
             song.PublishingDate = songDTO.PublishingDate ?? song.PublishingDate;
 
             await _songRepository.Update(song);
             return _mapper.Map<SongResponse>(song);
         }
 
-        public async Task<SongResponse> Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            var deletedSong = await _songRepository.Delete(id);
-            return _mapper.Map<SongResponse>(deletedSong);
+            await _songRepository.Delete(id);
         }
     }
 }
