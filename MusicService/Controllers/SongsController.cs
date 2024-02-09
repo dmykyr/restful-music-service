@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicService.Data;
 using MusicService.DTOs;
-using MusicService.Models;
 using MusicService.Responses;
 using MusicService.Services;
 
