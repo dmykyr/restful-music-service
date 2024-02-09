@@ -8,18 +8,24 @@ namespace MusicService.Services
 {
     public class ArtistService
     {
-        private readonly ArtistRepository _artistRepository;
         private readonly IMapper _mapper;
+        private readonly ArtistRepository _artistRepository;
+        private readonly AlbumRepository _albumRepository;
 
-        public ArtistService(ArtistRepository musicRepository, IMapper mapper)
+        public ArtistService(
+            IMapper mapper, 
+            ArtistRepository musicRepository, 
+            AlbumRepository albumRepository
+        )
         {
-            _artistRepository = musicRepository;
             _mapper = mapper;
+            _artistRepository = musicRepository;
+            _albumRepository = albumRepository;
         }
 
-        public async Task<IEnumerable<ArtistResponse>> GetAll()
+        public async Task<IEnumerable<ArtistResponse>> GetAllArtists(string searchName)
         {
-            var artists = await _artistRepository.GetAll();
+            var artists = await _artistRepository.GetAll(searchName);
             return _mapper.Map<IEnumerable<ArtistResponse>>(artists);
         }
 
@@ -58,6 +64,18 @@ namespace MusicService.Services
         {
             var deletedArtist = await _artistRepository.Delete(id);
             return _mapper.Map<ArtistResponse>(deletedArtist);
+        }
+
+        public async Task<IEnumerable<AlbumResponse>> GetArtistAlbums(Guid artistId)
+        {
+            var artistAlbums = await _albumRepository.GetArtistAlbums(artistId);
+            return _mapper.Map<IEnumerable<AlbumResponse>>(artistAlbums);
+        }
+
+        public async Task<IEnumerable<SongResponse>> GetArtistSongs(Guid artistId)
+        {
+            var artistSongs = await _artistRepository.GetArtistSongs(artistId);
+            return _mapper.Map<IEnumerable<SongResponse>>(artistSongs);
         }
     }
 }
