@@ -84,5 +84,37 @@ namespace MusicService.Services
             await _userRepository.Update(user);
             return _mapper.Map<UserResponse>(user);
         }
+
+        public async Task<IEnumerable<AlbumResponse>> GetFavoriteAlbums(Guid userId, string searchName)
+        {
+            var albums = await _userRepository.GetFavoriteAlbums(userId, searchName);
+            return _mapper.Map<IEnumerable<AlbumResponse>>(albums);
+        }
+
+        public async Task<IEnumerable<ArtistResponse>> GetFavoriteArtists(Guid userId, string searchName)
+        {
+            var artists = await _userRepository.GetFavoriteArtists(userId, searchName);
+            return _mapper.Map<IEnumerable<ArtistResponse>>(artists);
+        }
+
+        public async Task AddFavoriteAlbum (Guid userId, Guid albumId)
+        {
+            await _userRepository.AddFavoriteAlbum(userId, albumId);
+        }
+
+        public async Task AddFavoriteArtist(Guid userId, Guid artistId)
+        {
+            await _userRepository.AddFavoriteArtist(userId, artistId);
+        }
+
+        public async Task RemoveFavoriteAlbum(Guid userId, Guid albumId)
+        {
+            await _userRepository.RemoveFavoriteAlbum(userId, albumId);
+        }
+
+        public async Task RemoveFavoriteArtist(Guid userId, Guid artistId)
+        {
+            await _userRepository.RemoveFavoriteArtist(userId, artistId);
+        }
     }
 }
