@@ -34,6 +34,7 @@ namespace MusicService.Services
         public async Task<AlbumResponse> Create(CreateAlbumDTO albumDTO)
         {
             var albumEntity = _mapper.Map<Album>(albumDTO);
+            albumEntity.Id = Guid.NewGuid();
             albumEntity.PublishingDate = DateTime.Now;
 
             var createdAlbum = await _albumRepository.Add(albumEntity);
