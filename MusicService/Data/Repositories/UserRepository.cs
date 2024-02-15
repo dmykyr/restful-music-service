@@ -1,5 +1,5 @@
 ﻿using MusicService.Models;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MusicService.Data.Repositories
 {

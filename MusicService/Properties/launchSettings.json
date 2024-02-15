@@ -12,8 +12,8 @@
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "albums",
+      "launchBrowser": false,
+      "launchUrl": "api/albums",
       "applicationUrl": "http://localhost:5164",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -21,8 +21,8 @@
     },
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "albums",
+      "launchBrowser": false,
+      "launchUrl": "api/albums",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

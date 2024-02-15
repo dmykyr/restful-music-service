@@ -16,7 +16,7 @@ namespace MusicService.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ArtistResponse>> GetAllArtists([FromQuery] string searchName)
+        public async Task<IEnumerable<ArtistResponse>> GetAllArtists([FromQuery] string? searchName)
         {
             return await _artistService.GetAllArtists(searchName);
         }
