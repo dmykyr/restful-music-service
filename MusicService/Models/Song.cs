@@ -12,7 +12,7 @@ namespace MusicService.Models
         public string Title { get; set; }
 
         [Required]
-        public byte[] Track { get; set; }
+        public string Track { get; set; }
 
         [Required]
         public string Base64Image { get; set; }
