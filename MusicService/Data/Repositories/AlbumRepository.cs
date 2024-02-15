@@ -1,5 +1,5 @@
 ﻿using MusicService.Models;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MusicService.Data.Repositories
 { 
@@ -14,7 +14,15 @@ namespace MusicService.Data.Repositories
 
         public async Task<IEnumerable<Album>> GetAll(string searchName)
         {
-            return await _context.Albums.Where(a => a.Title.Contains(searchName)).ToListAsync();
+            IQueryable<Album> albums = _context.Albums;
+
+            if (!String.IsNullOrEmpty(searchName))
+            {
+                albums = albums.Where(a => a.Title.Contains(searchName));
+            }
+
+            var result = await albums.ToListAsync();
+            return result;
         }
 
         public async Task<Album> Get(Guid id)

@@ -8,7 +8,7 @@ namespace MusicService.Data
 {
     public class MapperProfile : Profile
     {
-        MapperProfile()
+        public MapperProfile()
         {
             CreateMap<ArtistDTO, Artist>();
             CreateMap<Artist, ArtistResponse>();

@@ -17,9 +17,9 @@ namespace MusicService.Services
             _mapper = mapper;
         }
 
-        public  async Task<IEnumerable<SongResponse>> GetAll() 
+        public  async Task<IEnumerable<SongResponse>> GetAll(string searchName) 
         {
-            var songs = await _songRepository.GetAll();
+            var songs = await _songRepository.GetAll(searchName);
             return _mapper.Map<IEnumerable<SongResponse>>(songs);
         }
 
@@ -32,6 +32,8 @@ namespace MusicService.Services
         public async Task<SongResponse> Add(CreateSongDTO songDTO)
         {
             var songEntity = _mapper.Map<Song>(songDTO);
+            songEntity.PublishingDate = DateTime.Now;
+
             var createdSong = await _songRepository.Add(songEntity);
             return _mapper.Map<SongResponse>(createdSong);
         }
