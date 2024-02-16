@@ -364,3 +364,4 @@ FodyWeavers.xsd
 /MusicService/Migrations
 /MusicService/music_app.db
 /MusicService/appsettings.json
+/MusicService/Migrations.zip

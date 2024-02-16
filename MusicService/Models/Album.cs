@@ -9,9 +9,6 @@ namespace MusicService.Models
         public Guid Id { get; set; }
 
         [Required]
-        public Guid PublisherId { get; set; }
-
-        [Required]
         [MaxLength(50)]
         public string Title { get; set; }
 
@@ -20,8 +17,5 @@ namespace MusicService.Models
 
         [Required]
         public DateTime PublishingDate { get; set; }
-
-        [ForeignKey("PublisherId")]
-        public Artist Publisher { get; set; }
     }
 }

@@ -62,11 +62,24 @@ namespace MusicService.Data.Repositories
 
         public async Task<IEnumerable<Song>> GetArtistSongs(Guid artistId)
         {
-            return await _context.ArtistsSongs
-                .Include(artistSong =>  artistSong.Song)
-                .Where(artistSong => artistSong.ArtistId == artistId)
-                .Select(artistSong => artistSong.Song)
+            var artistAlbums = await _context.ArtistAlbums
+                .Include(aa => aa.Album)
+                .Where(aa => aa.ArtistId == artistId)
+                .Select(aa => aa.Album)
                 .ToListAsync();
+
+            List<Song> songs = new List<Song>();
+            foreach (var album in artistAlbums)
+            {
+                var albumSongs = await _context.AlbumSongs
+                    .Include(albumSong => albumSong.Song)
+                    .Where(albumSong => albumSong.AlbumId == album.Id)
+                    .Select(albumSong => albumSong.Song)
+                    .ToListAsync();
+                songs.AddRange(songs);
+            }
+
+            return songs;
         }
     }
 }

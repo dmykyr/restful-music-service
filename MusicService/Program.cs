@@ -11,9 +11,12 @@ namespace MusicService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<MusicDbContext>(options =>
-                options.UseSqlite(builder.Configuration.GetConnectionString("MainConnectionString") 
+            builder.Services.AddDbContext<MusicDbContext>(options => 
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnectionString")
                 ?? throw new InvalidOperationException("Connection string 'MainConnectionString' not found.")));
+            //builder.Services.AddDbContext<MusicDbContext>(options =>
+            //    options.UseSqlite(builder.Configuration.GetConnectionString("MainConnectionString") 
+            //    ?? throw new InvalidOperationException("Connection string 'MainConnectionString' not found.")));
 
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             builder.Services.AddSingleton<IConfigurationRoot>(option => {
