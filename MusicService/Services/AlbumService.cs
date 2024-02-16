@@ -34,7 +34,6 @@ namespace MusicService.Services
         public async Task<AlbumResponse> Create(CreateAlbumDTO albumDTO)
         {
             var albumEntity = _mapper.Map<Album>(albumDTO);
-            albumEntity.Id = Guid.NewGuid();
             albumEntity.PublishingDate = DateTime.Now;
 
             var createdAlbum = await _albumRepository.Add(albumEntity);
@@ -51,7 +50,6 @@ namespace MusicService.Services
             }
 
             album.Title = albumDTO.Title ?? album.Title;
-            album.PublisherId = albumDTO.PublisherId ?? album.PublisherId;
             album.Base64Image = albumDTO.Base64Image ?? album.Base64Image;
             album.PublishingDate = albumDTO.PublishingDate ?? album.PublishingDate;
 
@@ -59,14 +57,9 @@ namespace MusicService.Services
             return _mapper.Map<AlbumResponse>(album);
         }
 
-        public async Task Delete(Guid albumId, Guid artistId)
+        public async Task Delete(Guid albumId)
         {
             var album = await _albumRepository.Get(albumId);
-            if (album.PublisherId != artistId)
-            {
-                throw new Exception();
-            }
-
             await _albumRepository.Delete(albumId);
         }
 
@@ -78,36 +71,11 @@ namespace MusicService.Services
 
         public async Task AttachSongToAlbum(Guid albumId, Guid songId)
         {
-            var album = await _albumRepository.Get(albumId);
-            var artistSongs = await _artistRepository.GetArtistSongs(album.PublisherId);
-
-            var song = artistSongs.First(artistSong => artistSong.Id == songId);
-
-            if(song == null)
-            {
-                throw new Exception();
-            }
-
             await _albumRepository.AttachSongToAlbum(albumId, songId);
         }
 
-        public async Task UnattachSongToAlbum(Guid albumId, Guid songId, Guid artistId)
+        public async Task UnattachSongToAlbum(Guid albumId, Guid songId)
         {
-            var album = await _albumRepository.Get(albumId);
-            if (album.PublisherId != artistId)
-            {
-                throw new Exception();
-            }
-
-            var artistSongs = await _artistRepository.GetArtistSongs(album.PublisherId);
-
-            var song = artistSongs.First(artistSong => artistSong.Id == songId);
-
-            if (song == null)
-            {
-                throw new Exception();
-            }
-
             await _albumRepository.UnattachSongToAlbum(albumId, songId);
         }
     }

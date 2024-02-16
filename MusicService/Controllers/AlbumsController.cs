@@ -41,9 +41,9 @@ namespace MusicService.Controllers
         }
 
         [HttpDelete("{albumId}")]
-        public async Task Delete(Guid albumId, [FromQuery] Guid artistId)
+        public async Task Delete(Guid albumId)
         {
-            await _albumService.Delete(albumId, artistId);
+            await _albumService.Delete(albumId);
         }
 
         [HttpGet("{albumId}/songs")]
@@ -59,9 +59,9 @@ namespace MusicService.Controllers
         }
 
         [HttpDelete("{albumId}/songs/{songId}")]
-        public async Task UnattachSongToAlbum(Guid albumId, Guid songId, [FromQuery] Guid artistId)
+        public async Task UnattachSongToAlbum(Guid albumId, Guid songId)
         {
-            await _albumService.UnattachSongToAlbum(albumId, songId, artistId);
+            await _albumService.UnattachSongToAlbum(albumId, songId);
         }
     }
 }

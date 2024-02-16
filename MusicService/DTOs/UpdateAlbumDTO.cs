@@ -4,8 +4,6 @@ namespace MusicService.DTOs
 {
     public class UpdateAlbumDTO
     {
-        public Guid? PublisherId { get; set; }
-
         [MaxLength(50)]
         public string? Title { get; set; }
 
