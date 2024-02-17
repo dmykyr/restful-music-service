@@ -28,12 +28,6 @@ namespace MusicService.Controllers
             return await _albumService.Get(albumId);
         }
 
-        [HttpPost]
-        public async Task<AlbumResponse> Create([FromBody] CreateAlbumDTO albumDTO)
-        {
-            return await _albumService.Create(albumDTO);
-        }
-
         [HttpPatch("{albumId}")]
         public async Task<AlbumResponse> Update(Guid albumId, [FromBody] UpdateAlbumDTO albumDTO)
         {
@@ -52,7 +46,7 @@ namespace MusicService.Controllers
             return await _albumService.GetAlbumSongs(albumId);
         }
 
-        [HttpPost("{albumId}/attach/{songId}")]
+        [HttpPost("{albumId}/songs/{songId}")]
         public async Task AttachSongToAlbum (Guid albumId, Guid songId)
         {
             await _albumService.AttachSongToAlbum(albumId, songId);

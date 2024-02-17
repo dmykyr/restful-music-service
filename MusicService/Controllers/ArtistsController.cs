@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MusicService.DTOs;
 using MusicService.Responses;
 using MusicService.Services;
 
@@ -33,7 +34,19 @@ namespace MusicService.Controllers
             return await _artistService.GetArtistAlbums(artistId);
         }
 
-        [HttpGet("{artistId}/albums")]
+        [HttpPost("{artistId}/albums")]
+        public async Task<AlbumResponse> CreateArtistAlbum([FromBody] CreateAlbumDTO albumDTO, Guid artistId)
+        {
+            return await _artistService.CreateArtistAlbum(artistId, albumDTO);
+        }
+
+        [HttpDelete("{artistId}/albums/{albumId}")]
+        public async Task DeleteArtistAlbum(Guid artistId, Guid albumId)
+        {
+            await _artistService.DeleteArtistAlbum(artistId, albumId);
+        }
+
+        [HttpGet("{artistId}/songs")]
         public async Task<IEnumerable<SongResponse>> GetArtistSongs(Guid artistId)
         {
             return await _artistService.GetArtistSongs(artistId);
