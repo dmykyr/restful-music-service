@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MusicService.Data.Repositories;
 using MusicService.DTO;
+using MusicService.DTOs;
 using MusicService.Models;
 using MusicService.Responses;
 
@@ -76,6 +77,22 @@ namespace MusicService.Services
         {
             var artistSongs = await _artistRepository.GetArtistSongs(artistId);
             return _mapper.Map<IEnumerable<SongResponse>>(artistSongs);
+        }
+
+        public async Task<AlbumResponse> CreateArtistAlbum(Guid artistId, CreateAlbumDTO albumDTO)
+        {
+            var albumEntity = _mapper.Map<Album>(albumDTO);
+            albumEntity.PublishingDate = DateTime.Now;
+
+            var createdAlbum = await _albumRepository.Add(albumEntity);
+            await _albumRepository.AttachAlbumToArtist(createdAlbum.Id, artistId);
+            return _mapper.Map<AlbumResponse>(createdAlbum);
+        }
+
+        public async Task DeleteArtistAlbum(Guid artistId, Guid albumId)
+        {
+            await _albumRepository.UnattachAlbumToArtist(albumId, artistId);
+            await _albumRepository.Delete(albumId);
         }
     }
 }

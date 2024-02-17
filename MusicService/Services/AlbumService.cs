@@ -31,15 +31,6 @@ namespace MusicService.Services
             return _mapper.Map<AlbumResponse>(album);
         }
 
-        public async Task<AlbumResponse> Create(CreateAlbumDTO albumDTO)
-        {
-            var albumEntity = _mapper.Map<Album>(albumDTO);
-            albumEntity.PublishingDate = DateTime.Now;
-
-            var createdAlbum = await _albumRepository.Add(albumEntity);
-            return _mapper.Map<AlbumResponse>(createdAlbum);
-        }
-
         public async Task<AlbumResponse> Update(Guid id, UpdateAlbumDTO albumDTO)
         {
             var album = await _albumRepository.Get(id);
@@ -59,7 +50,6 @@ namespace MusicService.Services
 
         public async Task Delete(Guid albumId)
         {
-            var album = await _albumRepository.Get(albumId);
             await _albumRepository.Delete(albumId);
         }
 

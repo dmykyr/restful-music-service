@@ -92,7 +92,27 @@ namespace MusicService.Data.Repositories
 
             _context.AlbumSongs.Remove(albumSong);
             await _context.SaveChangesAsync();
-            
+        }
+
+        public async Task AttachAlbumToArtist(Guid albumId, Guid artistId)
+        {
+            var artistAlbum = new ArtistAlbum() { AlbumId = albumId, ArtistId = artistId };
+
+            await _context.ArtistAlbums.AddAsync(artistAlbum);
+            await _context.SaveChangesAsync();
+        }
+        public async Task UnattachAlbumToArtist(Guid albumId, Guid artistId)
+        {
+            var artistAlbum = _context.ArtistAlbums
+                .FirstOrDefault(album => album.ArtistId == artistId && album.AlbumId == albumId);
+
+            if (artistAlbum == null)
+            {
+                throw new Exception();
+            }
+
+            _context.ArtistAlbums.Remove(artistAlbum);
+            await _context.SaveChangesAsync();
         }
     }
 }
