@@ -29,5 +29,11 @@ namespace MusicService.Models
 
         [ForeignKey("RoleId")]
         public Role Role { get; set; }
+
+        public Artist Artist { get; set; }
+
+        public ICollection<Artist> FavoriteArtists { get; set; }
+
+        public ICollection<Album> FavoriteAlbums { get; set; }
     }
 }

@@ -20,5 +20,7 @@ namespace MusicService.Models
         public ICollection<Artist> Artists { get; set; }
 
         public ICollection<Song> Songs { get; set; }
+
+        public ICollection<User> UserFans { get; set; }
     }
 }

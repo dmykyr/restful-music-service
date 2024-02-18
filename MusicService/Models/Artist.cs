@@ -1,5 +1,6 @@
 ﻿using Azure;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusicService.Models
 {
@@ -7,6 +8,8 @@ namespace MusicService.Models
     {
         [Key]
         public Guid Id { get; set; }
+        
+        public Guid? UserId { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -16,5 +19,11 @@ namespace MusicService.Models
         public string Base64Image { get; set; }
 
         public ICollection<Album> Albums { get; set; }
+
+
+        [ForeignKey("UserId")]
+        public User User { get; set; }
+
+        public ICollection<User> UserFans { get; set; }
     }
 }

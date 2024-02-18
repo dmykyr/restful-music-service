@@ -10,9 +10,24 @@ namespace MusicService.Data
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Song> Songs { get; set; }
         public DbSet<Album> Albums { get; set; }
-        public DbSet<FavoriteAlbum> FavoriteAlbums { get; set; }
-        public DbSet<UserArtist> UsersArtists { get; set; }
-        public DbSet<FavoriteArtist> FavoriteArtists { get; set; }
         public MusicDbContext(DbContextOptions<MusicDbContext>? options) : base(options) { }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+            .HasOne(u => u.Artist)
+            .WithOne(a => a.User)
+            .HasForeignKey<Artist>(a => a.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.FavoriteArtists)
+                .WithMany(a => a.UserFans)
+                .UsingEntity(j => j.ToTable("FavoriteArtists"));
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.FavoriteAlbums)
+                .WithMany(a => a.UserFans)
+                .UsingEntity(j => j.ToTable("FavoriteAlbums"));
+        }
     }
 }
