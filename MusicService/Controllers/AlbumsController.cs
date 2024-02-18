@@ -18,7 +18,7 @@ namespace MusicService.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<AlbumResponse>> GetAll([FromQuery] string? searchName = null)
+        public async Task<IEnumerable<AlbumResponse>> GetAll([FromQuery] string? searchName)
         {
             return await _albumService.GetAll(searchName);
         }

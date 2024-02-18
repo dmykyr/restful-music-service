@@ -55,45 +55,67 @@ namespace MusicService.Data.Repositories
 
         public async Task<IEnumerable<Album>> GetFavoriteAlbums(Guid userId, string searchName)
         {
-            return await _context.FavoriteAlbums
-                .Include(fa => fa.Album)
-                .Where(fa => fa.UserId == userId && fa.Album.Title.Contains(searchName))
-                .Select(fa => fa.Album)
-                .ToListAsync();
+            var user = await _context.Users
+                .Include(user => user.FavoriteAlbums)
+                .FirstOrDefaultAsync(user => user.Id == userId) ?? throw new Exception();
+
+            return user.FavoriteAlbums;
         }
 
         public async Task<IEnumerable<Artist>> GetFavoriteArtists(Guid userId, string searchName)
         {
-            return await _context.FavoriteArtists
-                .Include(fa => fa.Artist)
-                .Where(fa => fa.UserId == userId && fa.Artist.Name.Contains(searchName))
-                .Select(fa => fa.Artist)
-                .ToListAsync();
+            var user = await _context.Users
+                .Include(user => user.FavoriteArtists)
+                .FirstOrDefaultAsync(user => user.Id == userId) ?? throw new Exception();
+
+            return user.FavoriteArtists;
         }
 
         public async Task AddFavoriteAlbum (Guid userId, Guid albumId)
         {
-            await _context.FavoriteAlbums.AddAsync(new FavoriteAlbum { UserId = userId, AlbumId = albumId });
+            var album = await _context.Albums.FindAsync(albumId) ?? throw new Exception();
+            var user = await _context.Users
+                .Include(user => user.FavoriteAlbums)
+                .FirstOrDefaultAsync(user => user.Id == userId) ?? throw new Exception();
+
+            user.FavoriteAlbums.Add(album);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
 
         public async Task AddFavoriteArtist(Guid userId, Guid artistId)
         {
-            await _context.FavoriteArtists.AddAsync(new FavoriteArtist { UserId = userId, ArtistId = artistId });
+            var artist = await _context.Artists.FindAsync(artistId) ?? throw new Exception();
+            var user = await _context.Users
+                .Include(user => user.FavoriteArtists)
+                .FirstOrDefaultAsync(user => user.Id == userId) ?? throw new Exception();
+
+            user.FavoriteArtists.Add(artist);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
 
         public async Task RemoveFavoriteAlbum(Guid userId, Guid albumId)
         {
-            var favoriteAlbum = await _context.FavoriteAlbums.FirstAsync(fa => fa.UserId == userId && fa.AlbumId == albumId);
-            _context.FavoriteAlbums.Remove(favoriteAlbum);
+            var album = await _context.Albums.FindAsync(albumId) ?? throw new Exception();
+            var user = await _context.Users
+                .Include(user => user.FavoriteAlbums)
+                .FirstOrDefaultAsync(user => user.Id == userId) ?? throw new Exception();
+
+            user.FavoriteAlbums.Remove(album);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
 
         public async Task RemoveFavoriteArtist(Guid userId, Guid artistId)
         {
-            var favoriteArtist = await _context.FavoriteArtists.FirstAsync(fa => fa.UserId == userId && fa.ArtistId == artistId);
-            _context.FavoriteArtists.Remove(favoriteArtist);
+            var artist = await _context.Artists.FindAsync(artistId) ?? throw new Exception();
+            var user = await _context.Users
+                .Include(user => user.FavoriteArtists)
+                .FirstOrDefaultAsync(user => user.Id == userId) ?? throw new Exception();
+
+            user.FavoriteArtists.Remove(artist);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
     }
