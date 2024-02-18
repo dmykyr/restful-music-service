@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MusicService.Responses
+﻿namespace MusicService.Responses
 {
     public class ArtistResponse
     {
-        [MaxLength(50)]
+        public Guid Id { get; set; }
+
         public string Name { get; set; }
+
+        public string Base64Image { get; set; }
     }
 }

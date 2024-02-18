@@ -2,6 +2,7 @@
 using MusicService.DTOs;
 using MusicService.Responses;
 using MusicService.Services;
+using System.Runtime.InteropServices;
 
 namespace MusicService.Controllers
 {
@@ -17,7 +18,7 @@ namespace MusicService.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<AlbumResponse>> GetAll([FromQuery] string? searchName)
+        public async Task<IEnumerable<AlbumResponse>> GetAll([FromQuery] string? searchName = null)
         {
             return await _albumService.GetAll(searchName);
         }
@@ -47,9 +48,10 @@ namespace MusicService.Controllers
         }
 
         [HttpPost("{albumId}/songs/{songId}")]
-        public async Task AttachSongToAlbum (Guid albumId, Guid songId)
+        public async Task<IActionResult> AttachSongToAlbum (Guid albumId, Guid songId)
         {
             await _albumService.AttachSongToAlbum(albumId, songId);
+            return Ok();
         }
 
         [HttpDelete("{albumId}/songs/{songId}")]

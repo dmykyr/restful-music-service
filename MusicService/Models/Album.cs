@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MusicService.Models
 {
@@ -17,5 +16,9 @@ namespace MusicService.Models
 
         [Required]
         public DateTime PublishingDate { get; set; }
+
+        public ICollection<Artist> Artists { get; set; }
+
+        public ICollection<Song> Songs { get; set; }
     }
 }

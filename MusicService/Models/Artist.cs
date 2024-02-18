@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Azure;
+using System.ComponentModel.DataAnnotations;
 
 namespace MusicService.Models
 {
@@ -13,5 +14,7 @@ namespace MusicService.Models
 
         [Required]
         public string Base64Image { get; set; }
+
+        public ICollection<Album> Albums { get; set; }
     }
 }

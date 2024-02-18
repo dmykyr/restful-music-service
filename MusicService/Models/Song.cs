@@ -12,12 +12,14 @@ namespace MusicService.Models
         public string Title { get; set; }
 
         [Required]
-        public string Track { get; set; }
+        public byte[] Track { get; set; }
 
         [Required]
-        public string Base64Image { get; set; }
+        public byte[] Image { get; set; }
 
         [Required]
         public DateTime PublishingDate { get; set; }
+
+        public ICollection<Album> Albums { get; set; }
     }
 }
