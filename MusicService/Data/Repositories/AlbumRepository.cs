@@ -27,7 +27,7 @@ namespace MusicService.Data.Repositories
 
         public async Task<Album> Get(Guid id)
         {
-            return await _context.Albums.FindAsync(id);
+            return await _context.Albums.FindAsync(id) ?? throw new Exception();
         }
 
         public async Task<Album> Add(Album entity)
@@ -59,59 +59,59 @@ namespace MusicService.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Album>> GetArtistAlbums(Guid artistId)
-        {
-            return await _context.ArtistAlbums
-                .Include(aa => aa.Album)
-                .Where(aa => aa.ArtistId == artistId)
-                .Select(aa => aa.Album)
-                .ToListAsync();
-        }
-
         public async Task<IEnumerable<Song>> GetAlbumSongs(Guid albumId)
         {
-            return await _context.AlbumSongs
-                .Include(albumSong => albumSong.Song)
-                .Where(albumSong => albumSong.AlbumId == albumId)
-                .Select(albumSong => albumSong.Song)
-                .ToListAsync();
+            var album = await _context.Albums
+                .Include(album => album.Songs)
+                .FirstOrDefaultAsync(album => album.Id == albumId) ?? throw new Exception();
+            return album.Songs;
         }
 
         public async Task AttachSongToAlbum(Guid albumId, Guid songId)
         {
-            var albumSong = new AlbumSong() { AlbumId = albumId, SongId = songId };
-            await _context.AlbumSongs.AddAsync(albumSong);
+            var album = await _context.Albums
+                .Include(a => a.Songs)
+                .FirstOrDefaultAsync(album => album.Id == albumId) ?? throw new Exception();
+
+            var song = await _context.Songs.FirstOrDefaultAsync(song => song.Id == songId) ?? throw new Exception();
+
+            album.Songs.Add(song);
+            _context.Albums.Update(album);
             await _context.SaveChangesAsync();
         }
 
         public async Task UnattachSongToAlbum(Guid albumId, Guid songId)
         {
-            var albumSong = _context.AlbumSongs
-                .FirstOrDefault(albumSong => albumSong.SongId == songId && albumSong.AlbumId == albumId);
-            if (albumSong == null) throw new Exception();
+            var album = await _context.Albums.FirstOrDefaultAsync(album => album.Id == albumId) ?? throw new Exception();
 
-            _context.AlbumSongs.Remove(albumSong);
+            var song = await _context.Songs.FirstOrDefaultAsync(song => song.Id == songId) ?? throw new Exception();
+
+            album.Songs.Remove(song);
+            _context.Albums.Update(album);
             await _context.SaveChangesAsync();
         }
 
         public async Task AttachAlbumToArtist(Guid albumId, Guid artistId)
         {
-            var artistAlbum = new ArtistAlbum() { AlbumId = albumId, ArtistId = artistId };
+            var album = await _context.Albums.FirstOrDefaultAsync(a => a.Id == albumId) ?? throw new Exception();
 
-            await _context.ArtistAlbums.AddAsync(artistAlbum);
+            var artist = await _context.Artists.Include(a => a.Albums)
+                .FirstOrDefaultAsync(a => a.Id == artistId) ?? throw new Exception();
+
+            artist.Albums.Add(album);
+            _context.Artists.Update(artist);
             await _context.SaveChangesAsync();
         }
+
         public async Task UnattachAlbumToArtist(Guid albumId, Guid artistId)
         {
-            var artistAlbum = _context.ArtistAlbums
-                .FirstOrDefault(album => album.ArtistId == artistId && album.AlbumId == albumId);
+            var album = await _context.Albums.FirstOrDefaultAsync(a => a.Id == albumId) ?? throw new Exception();
 
-            if (artistAlbum == null)
-            {
-                throw new Exception();
-            }
+            var artist = await _context.Artists.Include(a => a.Albums)
+                .FirstOrDefaultAsync(a => a.Id == artistId) ?? throw new Exception();
 
-            _context.ArtistAlbums.Remove(artistAlbum);
+            artist.Albums.Remove(album);
+            _context.Artists.Update(artist);
             await _context.SaveChangesAsync();
         }
     }

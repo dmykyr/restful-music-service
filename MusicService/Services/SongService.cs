@@ -3,6 +3,7 @@ using MusicService.Data.Repositories;
 using MusicService.DTOs;
 using MusicService.Models;
 using MusicService.Responses;
+using System.Security.Cryptography;
 
 namespace MusicService.Services
 {
@@ -31,7 +32,9 @@ namespace MusicService.Services
 
         public async Task<SongResponse> Add(CreateSongDTO songDTO)
         {
-            var songEntity = _mapper.Map<Song>(songDTO);
+            var songEntity = new Song() { Title = songDTO.Title };
+            songEntity.Image = Convert.FromBase64String(songDTO.Base64Image);
+            songEntity.Track = Convert.FromBase64String(songDTO.Base64Track);
             songEntity.PublishingDate = DateTime.Now;
 
             var createdSong = await _songRepository.Add(songEntity);
@@ -48,9 +51,9 @@ namespace MusicService.Services
             }
 
             song.Title = songDTO.Title ?? song.Title;
-            song.Track = songDTO.Track ?? song.Track;
-            song.Base64Image = songDTO.Base64Image ?? song.Base64Image;
             song.PublishingDate = songDTO.PublishingDate ?? song.PublishingDate;
+            song.Image = String.IsNullOrEmpty(songDTO.Base64Image) ?
+                 song.Image : Convert.FromBase64String(songDTO.Base64Image);
 
             await _songRepository.Update(song);
             return _mapper.Map<SongResponse>(song);

@@ -27,7 +27,7 @@ namespace MusicService.Data.Repositories
 
         public async Task<Artist> Get(Guid id)
         {
-            return await _context.Artists.FindAsync(id);
+            return await _context.Artists.FindAsync(id) ?? throw new Exception();
         }
         public async Task<Artist> Add(Artist entity)
         {
@@ -62,24 +62,27 @@ namespace MusicService.Data.Repositories
 
         public async Task<IEnumerable<Song>> GetArtistSongs(Guid artistId)
         {
-            var artistAlbums = await _context.ArtistAlbums
-                .Include(aa => aa.Album)
-                .Where(aa => aa.ArtistId == artistId)
-                .Select(aa => aa.Album)
-                .ToListAsync();
+            var artist = await _context.Artists
+                .Include(artist => artist.Albums)
+                .ThenInclude(album => album.Songs)
+                .FirstOrDefaultAsync(a => a.Id == artistId) ?? throw new Exception();
 
             List<Song> songs = new List<Song>();
-            foreach (var album in artistAlbums)
+            foreach (var album in artist.Albums)
             {
-                var albumSongs = await _context.AlbumSongs
-                    .Include(albumSong => albumSong.Song)
-                    .Where(albumSong => albumSong.AlbumId == album.Id)
-                    .Select(albumSong => albumSong.Song)
-                    .ToListAsync();
-                songs.AddRange(songs);
+                songs.AddRange(album.Songs);
             }
 
             return songs;
+        }
+
+        public async Task<IEnumerable<Album>> GetArtistAlbums(Guid artistId)
+        {
+            var artist = await _context.Artists
+                .Include(a => a.Albums)
+                .FirstOrDefaultAsync(a => a.Id == artistId) ?? throw new Exception();
+
+            return artist.Albums;
         }
     }
 }

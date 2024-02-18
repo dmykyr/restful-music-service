@@ -27,7 +27,7 @@ namespace MusicService.Data.Repositories
 
         public async Task<Song> Get(Guid id)
         {
-            return await _context.Songs.FindAsync(id);
+            return await _context.Songs.FindAsync(id) ?? throw new Exception();
         }
 
         public async Task<Song> Add(Song entity)
@@ -48,15 +48,10 @@ namespace MusicService.Data.Repositories
         
         public async Task Delete(Guid id)
         {
-            var song = await _context.Songs.FindAsync(id);
+            var song = await _context.Songs.FindAsync(id) ?? throw new Exception();
 
-            if (song != null)
-            {
-                _context.Songs.Remove(song);
-                await _context.SaveChangesAsync();
-            }
-
-            throw new NotImplementedException();
+            _context.Songs.Remove(song);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -69,7 +69,7 @@ namespace MusicService.Services
 
         public async Task<IEnumerable<AlbumResponse>> GetArtistAlbums(Guid artistId)
         {
-            var artistAlbums = await _albumRepository.GetArtistAlbums(artistId);
+            var artistAlbums = await _artistRepository.GetArtistAlbums(artistId);
             return _mapper.Map<IEnumerable<AlbumResponse>>(artistAlbums);
         }
 
