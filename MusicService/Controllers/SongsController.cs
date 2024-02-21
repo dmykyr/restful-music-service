@@ -16,6 +16,12 @@ namespace MusicService.Controllers
             _songService = songService;
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<SongResponse>> GetAll([FromQuery] string? searchName)
+        {
+            return await _songService.GetAll(searchName);
+        }
+
         [HttpPost]
         public async Task<SongResponse> CreateSong([FromBody] CreateSongDTO songDTO)
         {
