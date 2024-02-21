@@ -3,7 +3,6 @@ using MusicService.Data.Repositories;
 using MusicService.DTOs;
 using MusicService.Models;
 using MusicService.Responses;
-using System.Security.Cryptography;
 
 namespace MusicService.Services
 {
