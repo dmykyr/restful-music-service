@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MusicService.DTO;
 using MusicService.DTOs;
 using MusicService.Models;
 using MusicService.Responses;
