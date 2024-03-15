@@ -28,6 +28,12 @@ namespace MusicService.Controllers
             return await _artistService.Get(artistId);
         }
 
+        [HttpPost]
+        public async Task<ArtistResponse> CreateArtist([FromBody] ArtistDTO artistDTO)
+        {
+            return await _artistService.CreateArtist(artistDTO);
+        }
+
         [HttpGet("{artistId}/albums")]
         public async Task<IEnumerable<AlbumResponse>> GetArtistAlbums(Guid artistId)
         {
