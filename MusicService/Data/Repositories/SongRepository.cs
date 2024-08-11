@@ -1,9 +1,11 @@
 ﻿using MusicService.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using MusicService.Interfaces;
 
 namespace MusicService.Data.Repositories
 {
-    public class SongRepository
+    public class SongRepository : ISongRepository
     {
         private readonly MusicDbContext _context;
 
@@ -12,23 +14,11 @@ namespace MusicService.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Song>> GetAll(string searchName)
-        {
-            IQueryable<Song> songs = _context.Songs;
+        public async Task<IEnumerable<Song>> GetMany(Expression<Func<Song, bool>> predicate) => 
+            await _context.Songs.Where(predicate).ToListAsync();
 
-            if (!String.IsNullOrEmpty(searchName))
-            {
-                songs = songs.Where(a => a.Title.Contains(searchName));
-            }
-
-            var result = await songs.ToListAsync();
-            return result;
-        }
-
-        public async Task<Song> Get(Guid id)
-        {
-            return await _context.Songs.FindAsync(id) ?? throw new Exception();
-        }
+        public async Task<Song> Get(Guid id) => 
+            await _context.Songs.FindAsync(id) ?? throw new Exception();
 
         public async Task<Song> Add(Song entity)
         {

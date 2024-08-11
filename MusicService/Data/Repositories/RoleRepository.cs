@@ -1,9 +1,11 @@
-﻿using MusicService.Models;
+﻿using MusicService.Interfaces;
+using MusicService.Models;
 using System.Data.Entity;
+using System.Linq.Expressions;
 
 namespace MusicService.Data.Repositories
 {
-    public class RoleRepository
+    public class RoleRepository : IRoleRepository
     {
         private readonly MusicDbContext _context;
 
@@ -12,15 +14,11 @@ namespace MusicService.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Role>> GetAll()
-        {
-            return await _context.Roles.ToListAsync();
-        }
+        public async Task<IEnumerable<Role>> GetMany(Expression<Func<Role, bool>> predicate) => 
+            await _context.Roles.Where(predicate).ToListAsync();
 
-        public async Task<Role> Get(Guid id)
-        {
-            return await _context.Roles.FindAsync(id);
-        }
+        public async Task<Role> Get(Guid id) => 
+            await _context.Roles.FindAsync(id) ?? throw new Exception();
 
         public async Task<Role> GetByName(string roleName)
         {

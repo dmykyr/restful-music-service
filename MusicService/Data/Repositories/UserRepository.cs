@@ -1,9 +1,10 @@
 ﻿using MusicService.Models;
 using Microsoft.EntityFrameworkCore;
+using MusicService.Interfaces;
 
 namespace MusicService.Data.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly MusicDbContext _context;
 
@@ -12,15 +13,8 @@ namespace MusicService.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetAll()
-        {
-            return await _context.Users.ToListAsync();
-        }
-
-        public async Task<User> Get(Guid id)
-        {
-            return await _context.Users.FindAsync(id);
-        }
+        public async Task<User> Get(Guid id) => 
+            await _context.Users.FindAsync(id) ?? throw new Exception();
 
         public async Task<User> Add(User entity)
         {

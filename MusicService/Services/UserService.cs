@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MusicService.Data.Repositories;
 using MusicService.DTOs;
+using MusicService.Interfaces;
 using MusicService.Models;
 using MusicService.Responses;
 
@@ -8,13 +8,13 @@ namespace MusicService.Services
 {
     public class UserService
     {
-        private readonly UserRepository _userRepository;
-        private readonly RoleRepository _roleRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IMapper _mapper;
 
         public UserService(
-            UserRepository userRepository, 
-            RoleRepository roleRepository, 
+            IUserRepository userRepository,
+            IRoleRepository roleRepository, 
             IMapper mapper)
         {
             _userRepository = userRepository;
@@ -22,12 +22,12 @@ namespace MusicService.Services
             _mapper = mapper;
         }
 
-        public async Task<UserResponse> Get (Guid id)
+        public async Task<UserResponse> Get(Guid id)
         {
             var user = await _userRepository.Get(id);
             return _mapper.Map<UserResponse>(user);
         }
-        
+
         public async Task<UserResponse> Create (CreateUserDTO userDTO)
         {
             var userEntity = _mapper.Map<User>(userDTO);
@@ -40,8 +40,8 @@ namespace MusicService.Services
         public async Task<UserResponse> Update(Guid id, UpdateUserDTO userDTO)
         {
             var user = await _userRepository.Get(id);
-            
-            if(user == null)
+
+            if (user == null)
             {
                 return null;
             }
