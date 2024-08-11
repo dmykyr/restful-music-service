@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MusicService.Data.Repositories;
 using MusicService.DTOs;
+using MusicService.Interfaces;
 using MusicService.Models;
 using MusicService.Responses;
 
@@ -9,13 +9,13 @@ namespace MusicService.Services
     public class ArtistService
     {
         private readonly IMapper _mapper;
-        private readonly ArtistRepository _artistRepository;
-        private readonly AlbumRepository _albumRepository;
+        private readonly IArtistRepository _artistRepository;
+        private readonly IAlbumRepository _albumRepository;
 
         public ArtistService(
-            IMapper mapper, 
-            ArtistRepository musicRepository, 
-            AlbumRepository albumRepository
+            IMapper mapper,
+            IArtistRepository musicRepository,
+            IAlbumRepository albumRepository
         )
         {
             _mapper = mapper;
@@ -23,11 +23,18 @@ namespace MusicService.Services
             _albumRepository = albumRepository;
         }
 
-        public async Task<IEnumerable<ArtistResponse>> GetAllArtists(string searchName)
+        public async Task<IEnumerable<ArtistResponse>> GetAll()
         {
-            var artists = await _artistRepository.GetAll(searchName);
+            var artists = await _artistRepository.GetAll();
             return _mapper.Map<IEnumerable<ArtistResponse>>(artists);
         }
+
+        public async Task<IEnumerable<ArtistResponse>> Search(string searchName)
+        {
+            var artists = await _artistRepository.GetMany(artist => artist.Name.Contains(searchName));
+            return _mapper.Map<IEnumerable<ArtistResponse>>(artists);
+        }
+
 
         public async Task<ArtistResponse> Get(Guid id)
         {

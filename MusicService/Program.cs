@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MusicService.Data;
 using MusicService.Data.Repositories;
+using MusicService.Interfaces;
 using MusicService.Services;
 
 namespace MusicService
@@ -11,31 +12,7 @@ namespace MusicService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<MusicDbContext>(options => 
-                options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnectionString")
-                ?? throw new InvalidOperationException("Connection string 'MainConnectionString' not found.")));
-            //builder.Services.AddDbContext<MusicDbContext>(options =>
-            //    options.UseSqlite(builder.Configuration.GetConnectionString("MainConnectionString") 
-            //    ?? throw new InvalidOperationException("Connection string 'MainConnectionString' not found.")));
-
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            builder.Services.AddSingleton<IConfigurationRoot>(option => {
-                return configuration;
-            });
-            builder.Services.AddScoped<AlbumRepository>();
-            builder.Services.AddScoped<SongRepository>();
-            builder.Services.AddScoped<ArtistRepository>();
-            builder.Services.AddScoped<UserRepository>();
-            builder.Services.AddScoped<RoleRepository>();
-
-            builder.Services.AddScoped<SongService>();
-            builder.Services.AddScoped<ArtistService>();
-            builder.Services.AddScoped<AlbumService>();
-            builder.Services.AddScoped<UserService>();
-
-            builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
-
-            builder.Services.AddControllers();
+            ConfigureServices(builder.Services, builder.Configuration);
 
             var app = builder.Build();
 
@@ -43,7 +20,39 @@ namespace MusicService
 
             app.MapControllers();
 
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
             app.Run();
+        }
+
+        private static void ConfigureServices(IServiceCollection services, IConfiguration config)
+        {
+            services.AddDbContext<MusicDbContext>(options =>
+                options.UseSqlServer(config.GetConnectionString("SqlServerConnectionString")
+                ?? throw new InvalidOperationException("Connection string 'SqlServerConnectionString' not found.")));
+            //services.AddDbContext<MusicDbContext>(options =>
+            //    options.UseSqlite(config.GetConnectionString("MainConnectionString") 
+            //    ?? throw new InvalidOperationException("Connection string 'MainConnectionString' not found.")));
+
+
+            services.AddScoped<IAlbumRepository, AlbumRepository>();
+            services.AddScoped<ISongRepository, SongRepository>();
+            services.AddScoped<IArtistRepository, ArtistRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+
+            services.AddScoped<SongService>();
+            services.AddScoped<ArtistService>();
+            services.AddScoped<AlbumService>();
+            services.AddScoped<UserService>();
+
+            services.AddAutoMapper(typeof(MapperProfile).Assembly);
+
+            services.AddControllers();
+
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using MusicService.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using MusicService.Interfaces;
 
 namespace MusicService.Data.Repositories
 { 
-    public class AlbumRepository
+    public class AlbumRepository : IAlbumRepository
     {
         private readonly MusicDbContext _context;
 
@@ -11,24 +13,16 @@ namespace MusicService.Data.Repositories
         {
             _context = context;
         }
-
-        public async Task<IEnumerable<Album>> GetAll(string searchName)
+        public async Task<IEnumerable<Artist>> GetAll()
         {
-            IQueryable<Album> albums = _context.Albums;
-
-            if (!String.IsNullOrEmpty(searchName))
-            {
-                albums = albums.Where(a => a.Title.Contains(searchName));
-            }
-
-            var result = await albums.ToListAsync();
-            return result;
+            return await _context.Artists.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Album> Get(Guid id)
-        {
-            return await _context.Albums.FindAsync(id) ?? throw new Exception();
-        }
+        public async Task<IEnumerable<Album>> GetMany(Expression<Func<Album,bool>> predicate) => 
+            await _context.Albums.AsNoTracking().Where(predicate).ToListAsync();
+
+        public async Task<Album> Get(Guid id) => 
+            await _context.Albums.FindAsync(id) ?? throw new Exception();
 
         public async Task<Album> Add(Album entity)
         {
