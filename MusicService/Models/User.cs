@@ -11,7 +11,6 @@ namespace MusicService.Models
         [Required]
         public Guid RoleId { get; set; }
 
-        public Guid? ArtistId { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -23,7 +22,7 @@ namespace MusicService.Models
         public string Login { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(256)]
         public string Password { get; set; }
 
         [Required]
@@ -31,9 +30,6 @@ namespace MusicService.Models
 
         [ForeignKey("RoleId")]
         public Role Role { get; set; }
-
-        [ForeignKey("ArtistId")]
-        public Artist? Artist { get; set; }
 
         public ICollection<Artist> FavoriteArtists { get; set; }
 

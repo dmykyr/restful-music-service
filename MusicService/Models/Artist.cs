@@ -19,7 +19,5 @@ namespace MusicService.Models
         public ICollection<Album> Albums { get; set; }
 
         public ICollection<User> UserFans { get; set; }
-
-        public User User { get; set; }
     }
 }
