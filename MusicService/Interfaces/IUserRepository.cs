@@ -5,6 +5,7 @@ namespace MusicService.Interfaces
     public interface IUserRepository
     {
         public Task<User> Get(Guid id);
+        public Task<User> Get(string id);
 
         public Task<User> Add(User entity);
 
