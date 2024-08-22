@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MusicService.Data;
 using MusicService.Data.Repositories;
 using MusicService.Interfaces;
 using MusicService.Services;
+using System.Text;
 
 namespace MusicService
 {
@@ -13,6 +16,7 @@ namespace MusicService
             var builder = WebApplication.CreateBuilder(args);
 
             ConfigureServices(builder.Services, builder.Configuration);
+            AuthConfig(builder.Services, builder.Configuration);
 
             var app = builder.Build();
 
@@ -42,6 +46,8 @@ namespace MusicService
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<TokenService>();
             services.AddScoped<SongService>();
             services.AddScoped<ArtistService>();
             services.AddScoped<AlbumService>();
@@ -53,6 +59,25 @@ namespace MusicService
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+        }
+
+        private static void AuthConfig(IServiceCollection services, IConfiguration config)
+        {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new()
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(config["Jwt:Key"]!))
+                    };
+                });
+
+            services.AddAuthorization();
         }
     }
 }

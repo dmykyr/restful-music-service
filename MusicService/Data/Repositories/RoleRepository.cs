@@ -1,6 +1,6 @@
 ﻿using MusicService.Interfaces;
 using MusicService.Models;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace MusicService.Data.Repositories
@@ -15,14 +15,15 @@ namespace MusicService.Data.Repositories
         }
 
         public async Task<IEnumerable<Role>> GetMany(Expression<Func<Role, bool>> predicate) => 
-            await _context.Roles.Where(predicate).ToListAsync();
+            await _context.Roles.AsNoTracking().Where(predicate).ToListAsync();
 
         public async Task<Role> Get(Guid id) => 
             await _context.Roles.FindAsync(id) ?? throw new Exception();
 
         public async Task<Role> GetByName(string roleName)
         {
-            return await _context.Roles.FirstAsync(r => r.Name == roleName);
+            return await _context.Roles.AsNoTracking().FirstAsync(role => role.Name == roleName) 
+                ?? throw new Exception();
         }
 
         public async Task<Role> Add(Role entity)

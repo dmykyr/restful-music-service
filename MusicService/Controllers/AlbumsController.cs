@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MusicService.DTOs;
 using MusicService.Responses;
 using MusicService.Services;
@@ -32,12 +33,14 @@ namespace MusicService.Controllers
             return await _albumService.Get(albumId);
         }
 
+        [Authorize]
         [HttpPatch("{albumId}")]
         public async Task<AlbumResponse> Update(Guid albumId, [FromBody] UpdateAlbumDTO albumDTO)
         {
             return await _albumService.Update(albumId, albumDTO);
         }
 
+        [Authorize]
         [HttpDelete("{albumId}")]
         public async Task Delete(Guid albumId)
         {
@@ -50,6 +53,7 @@ namespace MusicService.Controllers
             return await _albumService.GetAlbumSongs(albumId);
         }
 
+        [Authorize]
         [HttpPost("{albumId}/songs/{songId}")]
         public async Task<IActionResult> AttachSongToAlbum (Guid albumId, Guid songId)
         {
@@ -57,6 +61,7 @@ namespace MusicService.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpDelete("{albumId}/songs/{songId}")]
         public async Task UnattachSongToAlbum(Guid albumId, Guid songId)
         {

@@ -11,15 +11,21 @@ namespace MusicService.Services
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IMapper _mapper;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly TokenService _tokenService;
 
         public UserService(
             IUserRepository userRepository,
             IRoleRepository roleRepository, 
-            IMapper mapper)
+            IMapper mapper,
+            IPasswordHasher passwordHasher,
+            TokenService tokenService)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _mapper = mapper;
+            _passwordHasher = passwordHasher;
+            _tokenService = tokenService;
         }
 
         public async Task<UserResponse> Get(Guid id)
@@ -83,6 +89,36 @@ namespace MusicService.Services
             user.RoleId = role.Id;
             await _userRepository.Update(user);
             return _mapper.Map<UserResponse>(user);
+        }
+
+        public async Task<string> Register (RegistrationDTO registrationDTO)
+        {
+            var hashedPassword = _passwordHasher.HashPassword(registrationDTO.Password);
+            var role = await _roleRepository.GetByName("User");
+
+            Console.WriteLine(role.Id);
+            User user = new()
+            {
+                Password = hashedPassword,
+                Login = registrationDTO.Login,
+                Nickname = registrationDTO.Nickname,
+                RoleId = role.Id,
+            };
+
+            await _userRepository.Add(user);
+            return _tokenService.GenerateToken(user);
+        }
+
+        public async Task<string> Login (LoginDTO loginDTO)
+        {
+            var user = await _userRepository.Get(loginDTO.Login);
+
+            if (!_passwordHasher.VerifyHashedPassword(loginDTO.Password, user.Password))
+            {
+                throw new Exception("Incorrect password");
+            }
+
+            return _tokenService.GenerateToken(user);
         }
 
         public async Task<IEnumerable<AlbumResponse>> GetFavoriteAlbums(Guid userId, string searchName)

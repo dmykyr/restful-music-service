@@ -13,6 +13,9 @@ namespace MusicService.Data.Repositories
             _context = context;
         }
 
+        public async Task<User> Get(string login) =>
+            await _context.Users.AsNoTracking().FirstAsync(user => user.Login == login) ?? throw new Exception();
+
         public async Task<User> Get(Guid id) => 
             await _context.Users.FindAsync(id) ?? throw new Exception();
 
